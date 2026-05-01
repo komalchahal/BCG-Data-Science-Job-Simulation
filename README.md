@@ -25,12 +25,28 @@ Discovered that while price sensitivity is a factor, it is not the sole driver; 
 4. Feature Engineering
 Engineered new features to capture price volatility, specifically the difference between off-peak, peak, and mid-peak prices over time.
 Calculated average price changes over 6 months and handled skewed consumption data using log transformations.
-<img width="1335" height="720" alt="Screenshot (70)" src="https://github.com/user-attachments/assets/91db93ef-fe17-4f14-9538-7aeac63a75ab" />
+# Applying Log1p transformation to handle highly skewed consumption data
+# This ensures extreme outliers don't bias the model
+skewed_cols = ['cons_12m', 'cons_gas_12m', 'cons_last_month']
+for col in skewed_cols:
+    df[col] = np.log1p(df[col])
 
 6. Modeling & Evaluation
 Trained a Random Forest Classifier to predict churn probability.
 Achieved a 50% Recall rate, which is critical for the business to identify as many potential churners as possible to minimize revenue loss.
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report
+
+# Training the Random Forest Classifier
+model = RandomForestClassifier(n_estimators=1000, random_state=42)
+model.fit(X_train, y_train)
+
+# Evaluation focusing on Recall for Churners (Class 1)
+predictions = model.predict(X_test)
+print(classification_report(y_test, predictions))
+
 <img width="1354" height="732" alt="Screenshot (71)" src="https://github.com/user-attachments/assets/fbe0bc2f-df58-41f9-95cd-fee0871cd6e2" />
+<img width="1335" height="720" alt="Screenshot (70)" src="https://github.com/user-attachments/assets/91db93ef-fe17-4f14-9538-7aeac63a75ab" />
 
 
 Challenges & Solutions
@@ -47,6 +63,13 @@ Key Driver: "Net Margin" and "Consumption" emerged as the most important feature
 Price Sensitivity: Customers experiencing high price volatility in the last 3-6 months are at a higher risk of churning.
 
 Strategic Action: Recommended a Targeted 20% Discount Strategy for high-risk customers identified by the model. This proactive retention approach is more cost-effective than acquiring new customers.
+
+Strategic Recommendation: Identifying high-risk customers for a 20% discount
+# Probability > 0.5 indicates a high risk of churning
+probabilities = rf_model.predict_proba(X_test)[:, 1]
+high_risk_customers = X_test[probabilities > 0.5]
+print(f"Total High-Risk Customers Identified: {len(high_risk_customers)}")
+
 
 Conclusion
   
