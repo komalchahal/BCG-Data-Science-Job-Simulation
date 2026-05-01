@@ -16,19 +16,29 @@ Project Workflow
 1. Business Understanding & Hypothesis Testing
 Formulated the "Price Sensitivity" hypothesis.
 Identified essential data points (client information, historical pricing, and consumption patterns) needed to investigate churn drivers.
-2. Exploratory Data Analysis (EDA)
+
+3. Exploratory Data Analysis (EDA)
 Analyzed a 10% churn rate within the customer base.
 Discovered that while price sensitivity is a factor, it is not the sole driver; customer tenure and consumption patterns are also highly significant.
-3. Feature Engineering
+<img width="1343" height="749" alt="Screenshot (69)" src="https://github.com/user-attachments/assets/dc14e439-d181-4975-ae52-44dde52f7734" />
+
+4. Feature Engineering
 Engineered new features to capture price volatility, specifically the difference between off-peak, peak, and mid-peak prices over time.
 Calculated average price changes over 6 months and handled skewed consumption data using log transformations.
-4. Modeling & Evaluation
+<img width="1335" height="720" alt="Screenshot (70)" src="https://github.com/user-attachments/assets/91db93ef-fe17-4f14-9538-7aeac63a75ab" />
+
+6. Modeling & Evaluation
 Trained a Random Forest Classifier to predict churn probability.
 Achieved a 50% Recall rate, which is critical for the business to identify as many potential churners as possible to minimize revenue loss.
+<img width="1354" height="732" alt="Screenshot (71)" src="https://github.com/user-attachments/assets/fbe0bc2f-df58-41f9-95cd-fee0871cd6e2" />
+
 
 Challenges & Solutions
+
 Class Imbalance: Churners made up only ~10% of the data. To address this, I focused on Recall and F1-Score rather than simple Accuracy, ensuring the model actually identifies customers likely to leave.
+
 Data Integration: Merging historical price data with client consumption data required careful alignment. I used specific time-based joins to ensure the price features correctly reflected the period before a customer churned.
+
 Feature Complexity: Many consumption features were highly skewed. I applied Log Transformations to normalize these distributions, which improved the stability of the Random Forest model.  
 
 Key Insights & Recommendations
